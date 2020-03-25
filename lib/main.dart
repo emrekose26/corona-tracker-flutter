@@ -1,6 +1,9 @@
+import 'package:coronatracker/bloc/all/all_bloc.dart';
+import 'package:coronatracker/data/repository/all_repository.dart';
 import 'package:coronatracker/screens/countries/countries_screen.dart';
 import 'package:coronatracker/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() => runApp(CoronaTrackerApp());
 
@@ -11,7 +14,10 @@ class CoronaTrackerApp extends StatelessWidget {
       title: 'Corona Tracker',
       initialRoute: Home.routeName,
       routes: {
-        Home.routeName: (context) => Home(),
+        Home.routeName: (context) => BlocProvider(
+              create: (context) => AllBloc(repository: AllRepositoryImpl()),
+              child: Home(),
+            ),
         Countries.routeName: (context) => Countries()
       },
     );
