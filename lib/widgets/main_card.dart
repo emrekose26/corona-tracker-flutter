@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 class MainCard extends StatefulWidget {
   String title;
   String img_path;
-  int number;
+  String number;
   MainCard({@required this.title, @required this.img_path, @required this.number});
 
   @override
@@ -13,7 +13,7 @@ class _MainCardState extends State<MainCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200.0,
+      height: 150.0,
       width: double.infinity,
       child: Card(
         child: Center(
@@ -21,9 +21,9 @@ class _MainCardState extends State<MainCard> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Image.asset(widget.img_path, width: 70,height: 70),
-              Text(widget.number.toString(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-              Text(widget.title,style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal))
+              Image.asset(widget.img_path, width: 50,height: 50),
+              Text(widget.number, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),),
+              Text(widget.title,style: TextStyle(fontSize: 15, color: Colors.grey))
             ],
           ),
         ),
