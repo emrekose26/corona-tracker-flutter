@@ -17,7 +17,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   AllBloc allBloc;
 
   @override
@@ -47,7 +46,7 @@ class _HomeState extends State<Home> {
         child: Container(
           child: BlocListener<AllBloc, AllState>(
             listener: (context, state) {
-              if(state is ErrorAllState) {
+              if (state is ErrorAllState) {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
@@ -58,9 +57,9 @@ class _HomeState extends State<Home> {
             child: BlocBuilder<AllBloc, AllState>(
               // ignore: missing_return
               builder: (context, state) {
-                if(state is InitialAllState) {
+                if (state is InitialAllState) {
                   return _buildLoading();
-                } else if(state is LoadingAllState) {
+                } else if (state is LoadingAllState) {
                   return _buildLoading();
                 } else if (state is LoadedAllState) {
                   return _buildBody(state.response);
@@ -78,7 +77,7 @@ class _HomeState extends State<Home> {
           Navigator.pushNamed(context, Countries.routeName);
         },
         child: Icon(
-          Icons.search,
+          Icons.list,
           color: Colors.blueGrey,
         ),
       ),
@@ -106,9 +105,16 @@ class _HomeState extends State<Home> {
         Row(
           children: <Widget>[
             Flexible(flex: 1, child: _recoveredCardWidget(allCases.recovered)),
-            Flexible(flex: 1, child: _activePatientsCardWidget(allCases.cases - allCases.recovered - allCases.deaths))
+            Flexible(
+                flex: 1,
+                child: _activePatientsCardWidget(
+                    allCases.cases - allCases.recovered - allCases.deaths))
           ],
-        )
+        ),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Son Güncelleme: ' +
+                Helper.milliSecondToDate(allCases.updated), style: TextStyle(color: Colors.grey[600]),))
       ],
     );
   }
@@ -143,16 +149,31 @@ class _HomeState extends State<Home> {
               child: Text(
                 'Covid-19',
                 style: TextStyle(
-                    color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
           Container(
             height: 160,
-            child: Center(child: PieOutsideLabelChart.withSampleData([
-              new Cases("Hasta", Helper.calculatePercentage((allCases.cases - allCases.deaths - allCases.recovered), allCases.cases), charts.ColorUtil.fromDartColor(Colors.orange)),
-              new Cases("Ölüm", Helper.calculatePercentage(allCases.deaths, allCases.cases), charts.ColorUtil.fromDartColor(Colors.red)),
-              new Cases("Kurtarılan", Helper.calculatePercentage(allCases.recovered, allCases.cases), charts.ColorUtil.fromDartColor(Colors.lightGreen)),
+            child: Center(
+                child: PieOutsideLabelChart.withSampleData([
+              new Cases(
+                  "Hasta",
+                  Helper.calculatePercentage(
+                      (allCases.cases - allCases.deaths - allCases.recovered),
+                      allCases.cases),
+                  charts.ColorUtil.fromDartColor(Colors.orange)),
+              new Cases(
+                  "Ölüm",
+                  Helper.calculatePercentage(allCases.deaths, allCases.cases),
+                  charts.ColorUtil.fromDartColor(Colors.red)),
+              new Cases(
+                  "Kurtarılan",
+                  Helper.calculatePercentage(
+                      allCases.recovered, allCases.cases),
+                  charts.ColorUtil.fromDartColor(Colors.lightGreen)),
             ])),
           )
         ],
@@ -161,19 +182,30 @@ class _HomeState extends State<Home> {
   }
 
   Widget _allCasesCardWidget(int cases) {
-    return MainCard(title: 'Tüm vakalar',img_path: 'assets/images/virus.png',number: Helper.formatNumber(cases));
+    return MainCard(
+        title: 'Tüm vakalar',
+        img_path: 'assets/images/virus.png',
+        number: Helper.formatNumber(cases));
   }
 
   Widget _deathsCardWidget(int deaths) {
-    return MainCard(title: 'Ölü sayısı',img_path: 'assets/images/death.png',number: Helper.formatNumber(deaths));
+    return MainCard(
+        title: 'Ölü sayısı',
+        img_path: 'assets/images/death.png',
+        number: Helper.formatNumber(deaths));
   }
 
   Widget _recoveredCardWidget(int recovered) {
-    return MainCard(title: 'Kurtarılan vakalar',img_path: 'assets/images/recovered.png',number: Helper.formatNumber(recovered));
+    return MainCard(
+        title: 'Kurtarılan vakalar',
+        img_path: 'assets/images/recovered.png',
+        number: Helper.formatNumber(recovered));
   }
 
   Widget _activePatientsCardWidget(int patient) {
-    return MainCard(title: 'Hasta sayısı',img_path: 'assets/images/patient.png',number: Helper.formatNumber(patient));
+    return MainCard(
+        title: 'Hasta sayısı',
+        img_path: 'assets/images/patient.png',
+        number: Helper.formatNumber(patient));
   }
-
 }

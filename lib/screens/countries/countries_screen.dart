@@ -1,5 +1,6 @@
 import 'package:coronatracker/bloc/countries/bloc.dart';
 import 'package:coronatracker/data/model/countries/countries_model.dart';
+import 'package:coronatracker/helper/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -163,17 +164,17 @@ class _CountriesState extends State<Countries> {
               children: <Widget>[
                 Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                    child: Text("Vaka: " + _filteredList[index].cases.toString(),
-                        style: TextStyle(color: Colors.orange))),
+                    child: Text("Vaka: " + Helper.formatNumber(_filteredList[index].cases),
+                        style: TextStyle(color: Colors.orange, fontWeight: FontWeight.w600))),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                    child: Text("Ölüm: " + _filteredList[index].deaths.toString(),
-                        style: TextStyle(color: Colors.red))),
+                    child: Text("Ölüm: " + Helper.formatNumber(_filteredList[index].deaths),
+                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600))),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
                     child: Text(
-                        "İyileşen: " + _filteredList[index].recovered.toString(),
-                        style: TextStyle(color: Colors.lightGreen))),
+                        "İyileşen: " + Helper.formatNumber(_filteredList[index].recovered),
+                        style: TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.w600))),
               ],
             ),
           ),
