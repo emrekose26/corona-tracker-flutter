@@ -11,6 +11,11 @@ class Countries extends StatefulWidget {
 
 class _CountriesState extends State<Countries> {
   CountriesBloc countriesBloc;
+  TextEditingController _searchQueryController = TextEditingController();
+  bool _isSearching = false;
+  String searchQuery = "Search query";
+  List<Country> _countryList = [];
+  List<Country> _filteredList = [];
 
   @override
   void initState() {
@@ -28,8 +33,11 @@ class _CountriesState extends State<Countries> {
             color: Colors.black,
           ),
           backgroundColor: Colors.white,
-          title: Text('Ülkelere Göre Rakamlar',
-              style: TextStyle(color: Colors.black)),
+          actions: _buildActions(),
+          title: _isSearching
+              ? _buildSearchField()
+              : Text('Ülkelere Göre Rakamlar',
+                  style: TextStyle(color: Colors.black)),
         ),
         body: Container(
           child: BlocListener<CountriesBloc, CountriesState>(
@@ -50,6 +58,8 @@ class _CountriesState extends State<Countries> {
                 } else if (state is LoadingCountryCasesState) {
                   return _buildLoading();
                 } else if (state is LoadedCountryCasesState) {
+                  _countryList = state.countriesResponse.countryList;
+                  _filteredList = state.countriesResponse.countryList;
                   return _buildList(state.countriesResponse.countryList);
                 } else if (state is ErrorCountryCasesState) {
                   return _buildErrorUi(state.message);
@@ -60,48 +70,115 @@ class _CountriesState extends State<Countries> {
         ));
   }
 
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _searchQueryController,
+      autofocus: true,
+      decoration: InputDecoration(
+        hintText: "Ülkeye göre filtrele...",
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.grey),
+      ),
+      style: TextStyle(color: Colors.black, fontSize: 16.0),
+      onChanged: (query) => updateSearchQuery(query),
+    );
+  }
+
+  List<Widget> _buildActions() {
+    if (_isSearching) {
+      return <Widget>[
+        IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            if (_searchQueryController == null ||
+                _searchQueryController.text.isEmpty) {
+              Navigator.pop(context);
+              return;
+            }
+            _clearSearchQuery();
+          },
+        ),
+      ];
+    }
+
+    return <Widget>[
+      IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: _startSearch,
+      ),
+    ];
+  }
+
+  void _startSearch() {
+    ModalRoute.of(context)
+        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void updateSearchQuery(String newQuery) {
+    setState(() {
+      searchQuery = newQuery;
+      _filteredList = _countryList
+          .where((country) => country.country.toLowerCase().contains(newQuery.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void _stopSearching() {
+    _clearSearchQuery();
+    setState(() {
+      _isSearching = false;
+    });
+  }
+
+  void _clearSearchQuery() {
+    setState(() {
+      _searchQueryController.clear();
+      updateSearchQuery("");
+    });
+  }
+
   Widget _buildList(List<Country> countryList) {
     return RefreshIndicator(
-      onRefresh: () async{
+      onRefresh: () async {
         countriesBloc.add(FetchCountryCasesEvent());
       },
       child: ListView.builder(
-          itemBuilder: (context, index) => Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: ListTile(
-                  onTap: () {},
-                  title: Text(countryList[index].country,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(countryList[index].countryInfo.flag)),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                          child: Text(
-                              "Vaka: " + countryList[index].cases.toString(),
-                              style: TextStyle(color: Colors.orange))),
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                          child: Text(
-                              "Ölüm: " + countryList[index].deaths.toString(),
-                              style: TextStyle(color: Colors.red))),
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                          child: Text(
-                              "İyileşen: " +
-                                  countryList[index].recovered.toString(),
-                              style: TextStyle(color: Colors.lightGreen))),
-                    ],
-                  ),
-                ),
-              ),
-          itemCount: countryList.length),
+        itemCount: _filteredList.length,
+        itemBuilder: (context, index) => Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: ListTile(
+            onTap: () {},
+            title: Text(_filteredList[index].country,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+            leading: CircleAvatar(
+                backgroundImage:
+                    NetworkImage(_filteredList[index].countryInfo.flag)),
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                    child: Text("Vaka: " + _filteredList[index].cases.toString(),
+                        style: TextStyle(color: Colors.orange))),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                    child: Text("Ölüm: " + _filteredList[index].deaths.toString(),
+                        style: TextStyle(color: Colors.red))),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                    child: Text(
+                        "İyileşen: " + _filteredList[index].recovered.toString(),
+                        style: TextStyle(color: Colors.lightGreen))),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
