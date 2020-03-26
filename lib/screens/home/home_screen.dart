@@ -2,6 +2,7 @@ import 'package:coronatracker/bloc/all/all_bloc.dart';
 import 'package:coronatracker/bloc/all/all_event.dart';
 import 'package:coronatracker/bloc/all/all_state.dart';
 import 'package:coronatracker/data/model/all/all_cases_model.dart';
+import 'package:coronatracker/screens/countries/countries_screen.dart';
 import 'package:coronatracker/widgets/main_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +61,9 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, Countries.routeName);
+        },
         child: Icon(
           Icons.search,
           color: Colors.blueGrey,

@@ -19,8 +19,8 @@ class CountriesBloc extends Bloc<CountriesEvent, CountriesState> {
         yield LoadingCountryCasesState();
     }
     try {
-      List<CountriesResponse> countryList = await repository.getCasesByCountry();
-       LoadedCountryCasesState(countryList: countryList);
+      CountriesResponse countriesResponse = await repository.getCasesByCountry();
+       yield LoadedCountryCasesState(countriesResponse: countriesResponse);
     } catch (e) {
        yield ErrorCountryCasesState(message: e.toString());
     }

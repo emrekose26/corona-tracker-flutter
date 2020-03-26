@@ -17,10 +17,10 @@ class LoadingCountryCasesState extends CountriesState {
 }
 
 class LoadedCountryCasesState extends CountriesState {
-  List<CountriesResponse> countryList;
-  LoadedCountryCasesState({@required this.countryList});
+  CountriesResponse countriesResponse;
+  LoadedCountryCasesState({@required this.countriesResponse});
   @override
-  List<Object> get props => [countryList];
+  List<Object> get props => [countriesResponse];
 }
 
 class ErrorCountryCasesState extends CountriesState {
