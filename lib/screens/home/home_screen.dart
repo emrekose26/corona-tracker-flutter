@@ -135,19 +135,19 @@ class _HomeState extends State<Home> {
   }
 
   Widget _allCasesCardWidget(int cases) {
-    return MainCard(title: 'Tüm vakalar',img_path: 'virus.png',number: cases);
+    return MainCard(title: 'Tüm vakalar',img_path: 'assets/images/virus.png',number: cases);
   }
 
   Widget _deathsCardWidget(int deaths) {
-    return MainCard(title: 'Ölü sayısı',img_path: 'death.png',number: deaths);
+    return MainCard(title: 'Ölü sayısı',img_path: 'assets/images/death.png',number: deaths);
   }
 
   Widget _recoveredCardWidget(int recovered) {
-    return MainCard(title: 'Kurtarılan vakalar',img_path: 'recovered.png',number: recovered);
+    return MainCard(title: 'Kurtarılan vakalar',img_path: 'assets/images/recovered.png',number: recovered);
   }
 
   Widget _activePatientsCardWidget(int patient) {
-    return MainCard(title: 'Hasta sayısı',img_path: 'patient.png',number: patient);
+    return MainCard(title: 'Hasta sayısı',img_path: 'assets/images/patient.png',number: patient);
   }
 
 }

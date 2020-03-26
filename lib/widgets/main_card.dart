@@ -21,9 +21,9 @@ class _MainCardState extends State<MainCard> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Image.asset(widget.img_path, width: 40,height: 40),
-              Text(widget.number.toString(), style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
-              Text(widget.title,style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal))
+              Image.asset(widget.img_path, width: 70,height: 70),
+              Text(widget.number.toString(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+              Text(widget.title,style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal))
             ],
           ),
         ),
