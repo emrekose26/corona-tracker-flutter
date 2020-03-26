@@ -61,43 +61,48 @@ class _CountriesState extends State<Countries> {
   }
 
   Widget _buildList(List<Country> countryList) {
-    return ListView.builder(
-        itemBuilder: (context, index) => Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: ListTile(
-                onTap: () {},
-                title: Text(countryList[index].country,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                leading: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(countryList[index].countryInfo.flag)),
-                subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                        child: Text(
-                            "Vaka: " + countryList[index].cases.toString(),
-                            style: TextStyle(color: Colors.orange))),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                        child: Text(
-                            "Ölüm: " + countryList[index].deaths.toString(),
-                            style: TextStyle(color: Colors.red))),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                        child: Text(
-                            "İyileşen: " +
-                                countryList[index].recovered.toString(),
-                            style: TextStyle(color: Colors.lightGreen))),
-                  ],
+    return RefreshIndicator(
+      onRefresh: () async{
+        countriesBloc.add(FetchCountryCasesEvent());
+      },
+      child: ListView.builder(
+          itemBuilder: (context, index) => Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: ListTile(
+                  onTap: () {},
+                  title: Text(countryList[index].country,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                  leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(countryList[index].countryInfo.flag)),
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                              "Vaka: " + countryList[index].cases.toString(),
+                              style: TextStyle(color: Colors.orange))),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                              "Ölüm: " + countryList[index].deaths.toString(),
+                              style: TextStyle(color: Colors.red))),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                              "İyileşen: " +
+                                  countryList[index].recovered.toString(),
+                              style: TextStyle(color: Colors.lightGreen))),
+                    ],
+                  ),
                 ),
               ),
-            ),
-        itemCount: countryList.length);
+          itemCount: countryList.length),
+    );
   }
 
   Widget _buildLoading() {
